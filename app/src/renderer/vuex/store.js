@@ -7,6 +7,17 @@ import modules from './modules'
 
 Vue.use(Vuex)
 
+var state = {
+  insSeq: null,
+  pageSeq: null,
+  sizeOfMem: 4,
+  FIFO: null,
+  LRU: null,
+  LFU: null,
+  Optimal: null
+}
+
+
 export default new Vuex.Store({
   actions,
   getters,
