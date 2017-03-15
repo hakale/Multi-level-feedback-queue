@@ -1,8 +1,13 @@
 export default [
   {
     path: '/',
-    name: 'landing-page',
-    component: require('components/LandingPageView')
+    name: 'start-page',
+    component: require('components/startPage')
+  },
+  {
+    path: '/mainDesk',
+    name: 'main-desk',
+    component: require('components/mainDesk')
   },
   {
     path: '*',

@@ -7,7 +7,7 @@ import modules from './modules'
 
 Vue.use(Vuex)
 
-var state = {
+/* var state = {
   insSeq: null,
   pageSeq: null,
   sizeOfMem: 4,
@@ -15,8 +15,7 @@ var state = {
   LRU: null,
   LFU: null,
   Optimal: null
-}
-
+} */
 
 export default new Vuex.Store({
   actions,

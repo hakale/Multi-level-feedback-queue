@@ -12,12 +12,12 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800
+    resizable: false,
+    height: 656,
+    width: 1013
   })
-
+  mainWindow.setMenuBarVisibility(false)
   mainWindow.loadURL(winURL)
-
   mainWindow.on('closed', () => {
     mainWindow = null
   })
