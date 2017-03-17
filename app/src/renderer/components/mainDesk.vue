@@ -1,82 +1,59 @@
 <template>
   <div class="bottom">
     <div class="thirdQueue">
-      <Row :gutter="40">
-        <i-col span="4">
-          <Card style="width:70px;height:90px">
-          </Card>
-        </i-col>
-        <i-col span="4">
-        </i-col>
-        <i-col span="4">
-        </i-col>
-        <i-col span="4">
-        </i-col>
-        <i-col span="4">
-        </i-col>
+      <Row>
       </Row>
     </div>
     <div class="secondQueue">
-      <Row :gutter="40">
-        <i-col span="4">
-          <Card style="width:70px;height:100px">
-          </Card>
-        </i-col>
-        <i-col span="4">
-        </i-col>
-        <i-col span="4">
-        </i-col>
-        <i-col span="4">
-        </i-col>
-        <i-col span="4">
-        </i-col>
+      <Row>
       </Row>
     </div>
     <div class="firstQueue">
-      <Row :gutter="40">
-        <i-col span="4">
-          <Card style="width:70px;height:100px">
-          </Card>
-        </i-col>
-        <i-col span="4">
-        </i-col>
-        <i-col span="4">
-        </i-col>
-        <i-col span="4">
-        </i-col>
-        <i-col span="4">
-        </i-col>
+      <Row
+        is="my-card"
+        v-for="msg in cards"
+        v-bind:message="msg"
+      >
       </Row>
     </div>
     <div class="chooseCard">
-      <Row :gutter="60">
-        <i-col span="4">
-          <Card style="width:70px;height:100px">
-            <p>id:,time:</p>
-          </Card>
-        </i-col>
-        <i-col span="4">
-          <Card style="width:70px;height:100px">
-          </Card>
-        </i-col>
-        <i-col span="4">
-          <Card style="width:70px;height:100px">
-          </Card>
-        </i-col>
-        <i-col span="4">
-          <Card style="width:70px;height:100px">
-          </Card>
-        </i-col>
+      <Row
+        is="my-card"
+        v-for="msg in cards"
+        v-bind:message="msg"
+      >
       </Row>
     </div>
   </div>
 </template>
 
 <script>
-  import mycard from './myCard'
+  import myCard from './myCard'
   export default {
+    data: function () {
+      return {
+        cards: [
+          {
+            id: 'progress1',
+            time: 13
+          },
+          {
+            id: 'progress2',
+            time: 13
+          },
+          {
+            id: 'progress3',
+            time: 1
+          },
+          {
+            id: 'progress4',
+            time: 3
+          }
+        ]
+      }
+    },
     components: {
-      mycard
+      myCard
     },
     name: 'main-desk'
   }
@@ -91,21 +68,25 @@
   }
   .thirdQueue{
     position: fixed;
+    width: 480px;
     left: 160px;
     top: 80px;
   }
   .secondQueue{
     position: fixed;
+    width: 480px;
     left: 160px;
     top: 230px;
   }
   .firstQueue{
     position: fixed;
+    width: 480px;
     left: 160px;
     top: 390px;
   }
   .chooseCard{
     position: fixed;
+    width: 400px;
     left: 230px;
     top: 515px;
   }
