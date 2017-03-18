@@ -78,6 +78,7 @@
     "webpack-dev-server": "^2.3.0"
   },
   "dependencies": {
+    "vuedraggable": "^2.9.0",
     "iview": "^2.0.0-rc.4",
     "vue": "^2.1.10",
     "vue-electron": "^1.0.6",
