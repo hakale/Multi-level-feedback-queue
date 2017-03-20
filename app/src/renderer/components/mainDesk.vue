@@ -38,14 +38,14 @@
     </div>
     <div class="buttonsFirstRow">
       <Button-group shape="circle" size="small">
-        <i-button type="success">
+        <i-button @click.native="speedDownQueue" type="success">
           <Icon type="chevron-left"></Icon>
           减速
         </i-button>
         <i-button @click.native="pauseQueue" type="success">
           暂停
         </i-button>
-        <i-button type="success">
+        <i-button @click.native="speedUpQueue" type="success">
           加速
           <Icon type="chevron-right"></Icon>
         </i-button>
@@ -119,7 +119,6 @@
         selectedCards: [
         ],
         index: 4,
-        caculatingTime: 1000,
         isCaculating: false,
         caculateApp: null,
         firstQueueCost: 2,
@@ -157,17 +156,27 @@
           } else {
             this.thirdQueueCards.shift()
           }
+        } else {
+          this.pauseQueue()
         }
       },
       startQueue () {
         if (this.firstQueueCards.length === 0 && this.secondQueueCards.length === 0 && this.thirdQueueCards.length === 0) {
           alert('请将至少一张进程卡片加入队列')
         } else {
-          this.caculateApp = setInterval(this.caculateQueue, this.caculatingTime)
+          this.caculateApp = setInterval(this.caculateQueue, 1000)
         }
       },
       pauseQueue () {
         clearInterval(this.caculateApp)
+      },
+      speedUpQueue () {
+        clearInterval(this.caculateApp)
+        this.caculateApp = setInterval(this.caculateQueue, 500)
+      },
+      speedDownQueue () {
+        clearInterval(this.caculateApp)
+        this.caculateApp = setInterval(this.caculateQueue, 2000)
       }
     },
     computed: {
@@ -314,7 +323,7 @@
     top: 515px;
   }
   .slide-enter-active {
-    transition: all 1s ease-in;
+    transition: all .5s ease-in;
   }
   .slide-leave-active {
     transition: all .5s ease-out;
