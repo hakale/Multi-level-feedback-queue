@@ -12,6 +12,9 @@
         </Row>
       </transition-group>
     </div>
+    <div class="thirdCost">
+      {{ thirdQueueCost }}
+    </div>
     <div class="secondQueue">
       <transition-group name="slide">
         <Row
@@ -24,6 +27,9 @@
         </Row>
       </transition-group>
     </div>
+    <div class="secondCost">
+      {{ secondQueueCost }}
+    </div>
     <div class="firstQueue">
       <transition-group name="slide">
         <Row
@@ -35,6 +41,9 @@
         >
         </Row>
       </transition-group>
+    </div>
+    <div class="firstCost">
+      {{ firstQueueCost }}
     </div>
     <div class="buttonsFirstRow">
       <Button-group shape="circle" size="small">
@@ -163,12 +172,13 @@
       startQueue () {
         if (this.firstQueueCards.length === 0 && this.secondQueueCards.length === 0 && this.thirdQueueCards.length === 0) {
           alert('请将至少一张进程卡片加入队列')
-        } else {
+        } else if (this.caculateApp == null) {
           this.caculateApp = setInterval(this.caculateQueue, 1000)
         }
       },
       pauseQueue () {
         clearInterval(this.caculateApp)
+        this.caculateApp = null
       },
       speedUpQueue () {
         clearInterval(this.caculateApp)
@@ -196,7 +206,7 @@
             firstCacheTotalTime += this.firstQueueCards[i]['totaltime']
             firstCacheTime += this.firstQueueCards[i]['time']
           }
-          firstCache.push({id: '...', index: this.firstQueueCards[3]['index'], totaltime: firstCacheTotalTime, time: firstCacheTime})
+          firstCache.push({id: 'MORE', index: this.firstQueueCards[3]['index'], totaltime: firstCacheTotalTime, time: firstCacheTime})
         }
         return firstCache
       },
@@ -209,7 +219,7 @@
             secondCacheTotalTime += this.secondQueueCards[i]['totaltime']
             secondCacheTime += this.secondQueueCards[i]['time']
           }
-          secondCache.push({id: '...', index: this.secondQueueCards[3]['index'], totaltime: secondCacheTotalTime, time: secondCacheTime})
+          secondCache.push({id: 'MORE', index: this.secondQueueCards[3]['index'], totaltime: secondCacheTotalTime, time: secondCacheTime})
         }
         return secondCache
       },
@@ -222,7 +232,7 @@
             thirdCacheTotalTime += this.thirdQueueCards[i]['totaltime']
             thirdCacheTime += this.thirdQueueCards[i]['time']
           }
-          thirdCache.push({id: '...', index: this.thirdQueueCards[3]['index'], totaltime: thirdCacheTotalTime, time: thirdCacheTime})
+          thirdCache.push({id: 'MORE', index: this.thirdQueueCards[3]['index'], totaltime: thirdCacheTotalTime, time: thirdCacheTime})
         }
         return thirdCache
       }
@@ -265,6 +275,30 @@
     height: 617px;
     background: url(../../../dist/background.png);
     background-size: cover;
+  }
+  .thirdCost{
+    position: fixed;
+    font-size: 50px;
+    opacity: 0.5;
+    color: #ffffff;
+    left: 700px;
+    top: 90px;
+  }
+  .secondCost{
+    position: fixed;
+    font-size: 50px;
+    opacity: 0.5;
+    color: #ffffff;
+    left: 700px;
+    top: 240px;
+  }
+  .firstCost{
+    position: fixed;
+    font-size: 50px;
+    opacity: 0.5;
+    color: #ffffff;
+    left: 700px;
+    top: 400px;
   }
   .thirdQueue{
     position: fixed;
@@ -323,10 +357,11 @@
     top: 515px;
   }
   .slide-enter-active {
-    transition: all .5s ease-in;
+    transition: all .6s ease-in-out;
   }
   .slide-leave-active {
-    transition: all .5s ease-out;
+    transform: translateX(-10px);
+    transition: all .3s ease-out;
   }
   .slide-enter{
     transform: translateX(10px);
