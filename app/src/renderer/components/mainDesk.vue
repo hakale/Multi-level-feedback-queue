@@ -79,6 +79,7 @@
         is="my-card"
         v-for="msg in waitingCards"
         v-bind:message="msg"
+        v-bind:key="msg['index']"
       >
       </Row>
     </draggable>
@@ -171,7 +172,8 @@
       },
       startQueue () {
         if (this.firstQueueCards.length === 0 && this.secondQueueCards.length === 0 && this.thirdQueueCards.length === 0) {
-          alert('请将至少一张进程卡片加入队列')
+          // alert('请将至少一张进程卡片加入队列')
+          this.$Message.info('这是一条普通的提醒')
         } else if (this.caculateApp == null) {
           this.caculateApp = setInterval(this.caculateQueue, 1000)
         }
@@ -277,28 +279,22 @@
     background-size: cover;
   }
   .thirdCost{
-    position: fixed;
-    font-size: 50px;
-    opacity: 0.5;
-    color: #ffffff;
     left: 700px;
     top: 90px;
   }
-  .secondCost{
-    position: fixed;
-    font-size: 50px;
-    opacity: 0.5;
-    color: #ffffff;
+  .secondCost{ 
     left: 700px;
     top: 240px;
   }
   .firstCost{
+    left: 700px;
+    top: 400px;
+  }
+  .thirdCost,.secondCost,.firstCost{
     position: fixed;
     font-size: 50px;
     opacity: 0.5;
     color: #ffffff;
-    left: 700px;
-    top: 400px;
   }
   .thirdQueue{
     position: fixed;
@@ -357,18 +353,20 @@
     top: 515px;
   }
   .slide-enter-active {
-    transition: all .6s ease-in-out;
+    transition: all .5s ease-in;
+    transition-delay: .5s;
   }
   .slide-leave-active {
-    transform: translateX(-10px);
-    transition: all .3s ease-out;
+    transform: translateX(-20px);
+    transition: all .5s ease-out;
+    opacity: 0;
   }
   .slide-enter{
     transform: translateX(10px);
     opacity: 0;
   }
   .slide-leave{
-    opacity: 0;
+    opacity: 1;
   }
   .ghost{
     opacity: 0.5;
