@@ -1,27 +1,19 @@
-# multi-level-feedback-queue
+# 多级反馈队列
 
-> Multi-level-feedback-queue
+## 演示
 
-## Build Setup
+![演示](./demo.gif)
+
+## 如何使用
 
 ``` bash
-# install dependencies
+# 安装依赖
 npm install
 
-# serve with hot reload at localhost:9080
+# 以开发者模式运行
 npm run dev
 
-# build electron app for production
-npm run build
-
-# lint all JS/Vue component files in `app/src`
-npm run lint
-
-# run webpack in production
-npm run pack
+# 打包win32文件
+npm run build:win32
 ```
-More information can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/docs/npm_scripts.html).
 
----
-
-This project was generated from [electron-vue](https://github.com/SimulatedGREG/electron-vue) using [vue-cli](https://github.com/vuejs/vue-cli). 
