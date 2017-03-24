@@ -47,29 +47,35 @@
     </div>
     <div class="buttonsFirstRow">
       <Button-group shape="circle" size="small">
-        <i-button @click.native="speedDownQueue" type="success">
+        <Button @click.native="speedDownQueue" type="success">
           <Icon type="chevron-left"></Icon>
           减速
-        </i-button>
-        <i-button @click.native="pauseQueue" type="success">
+        </Button>
+        <Button @click.native="pauseQueue" type="success">
           暂停
-        </i-button>
-        <i-button @click.native="speedUpQueue" type="success">
+        </Button>
+        <Button @click.native="speedUpQueue" type="success">
           加速
           <Icon type="chevron-right"></Icon>
-        </i-button>
+        </Button>
       </Button-group>
     </div>
     <div class="buttonsSecondRow">
-      <i-button @click.native="startQueue" type="primary" size="small" shape="circle" long>
+      <Button @click.native="startQueue" type="primary" size="small" shape="circle" long>
         开始
-      </i-button>
+      </Button>
     </div>
     <div class="buttonsThirdRow">
-      <i-button type="error" size="small" shape="circle" long>
-        结束
-      </i-button>
+      <Button @click.native="modal = true" type="error" size="small" shape="circle" long>
+        图表
+      </Button>
     </div>
+    <Modal
+      title="多级反馈处理结果"
+      v-model="modal"
+      :mask-closable="false">
+      <Table height="250" :columns="resultColumns" :data="resultQueue"></Table>
+    </Modal>
     <draggable class="selected" v-model="selectedCards" :options="dragOptions" :move="onMove" >
       <Row>
       </Row>
@@ -105,32 +111,62 @@
             id: 'progress1',
             index: 1,
             totaltime: 2,
-            time: 2
+            time: 2,
+            startTime: 0
           },
           {
             id: 'progress2',
             index: 2,
             totaltime: 4,
-            time: 4
+            time: 4,
+            startTime: 0
           },
           {
             id: 'progress3',
             index: 3,
             totaltime: 6,
-            time: 6
+            time: 6,
+            startTime: 0
           },
           {
             id: 'progress4',
             index: 4,
             totaltime: 8,
-            time: 8
+            time: 8,
+            startTime: 0
           }
         ],
         selectedCards: [
         ],
+        resultColumns: [
+          {
+            title: '进程名',
+            key: 'id',
+            width: 120
+          },
+          {
+            title: '需要时间',
+            key: 'totaltime',
+            width: 120
+          },
+          {
+            title: '周转时间',
+            key: 'startTime',
+            width: 120
+          },
+          {
+            title: '带权周转时间',
+            key: 'weightStartTime',
+            width: 120
+          }
+        ],
+        resultQueue: [
+        ],
+        modal: false,
         index: 4,
         isCaculating: false,
         caculateApp: null,
+        QueueRuntime: 0,
         firstQueueCost: 2,
         secondQueueCost: 4,
         thirdQueueCost: 6,
@@ -146,25 +182,31 @@
       },
       caculateQueue () {
         if (this.firstQueueCards.length !== 0) {
+          this.QueueRuntime += this.firstQueueCost
           this.firstQueueCards[0]['time'] -= this.firstQueueCost
           if (this.firstQueueCards[0]['time'] > 0) {
             this.secondQueueCards.push(this.firstQueueCards.shift())
           } else {
-            this.firstQueueCards.shift()
+            this.firstQueueCards[0]['startTime'] = this.QueueRuntime + this.firstQueueCards[0]['time'] - this.firstQueueCards[0]['startTime']
+            this.resultQueue.push(this.firstQueueCards.shift())
           }
         } else if (this.secondQueueCards.length !== 0) {
+          this.QueueRuntime += this.secondQueueCost
           this.secondQueueCards[0]['time'] -= this.secondQueueCost
           if (this.secondQueueCards[0]['time'] > 0) {
             this.thirdQueueCards.push(this.secondQueueCards.shift())
           } else {
-            this.secondQueueCards.shift()
+            this.secondQueueCards[0]['startTime'] = this.QueueRuntime + this.secondQueueCards[0]['time'] - this.secondQueueCards[0]['startTime']
+            this.resultQueue.push(this.secondQueueCards.shift())
           }
         } else if (this.thirdQueueCards.length !== 0) {
+          this.QueueRuntime += this.thirdQueueCost
           this.thirdQueueCards[0]['time'] -= this.thirdQueueCost
           if (this.thirdQueueCards[0]['time'] > 0) {
             this.thirdQueueCards.push(this.thirdQueueCards.shift())
           } else {
-            this.thirdQueueCards.shift()
+            this.thirdQueueCards[0]['startTime'] = this.QueueRuntime + this.thirdQueueCards[0]['time'] - this.thirdQueueCards[0]['startTime']
+            this.resultQueue.push(this.thirdQueueCards.shift())
           }
         } else {
           this.pauseQueue()
@@ -172,8 +214,7 @@
       },
       startQueue () {
         if (this.firstQueueCards.length === 0 && this.secondQueueCards.length === 0 && this.thirdQueueCards.length === 0) {
-          // alert('请将至少一张进程卡片加入队列')
-          this.$Message.info('这是一条普通的提醒')
+          alert('请将至少一张进程卡片加入队列')
         } else if (this.caculateApp == null) {
           this.caculateApp = setInterval(this.caculateQueue, 1000)
         }
@@ -251,6 +292,7 @@
       },
       selectedCards () {
         if (this.selectedCards.length >= 1) {
+          this.selectedCards[0]['startTime'] += this.QueueRuntime
           this.firstQueueCards.push(this.selectedCards.shift())
         }
       },
@@ -259,7 +301,7 @@
           var randomProcessId = 'process' + Math.ceil(Math.random() * 20)
           var randomProcessTime = Math.ceil(Math.random() * 20)
           ++(this.index)
-          this.waitingCards.push({id: randomProcessId, index: this.index, totaltime: randomProcessTime, time: randomProcessTime})
+          this.waitingCards.push({id: randomProcessId, index: this.index, totaltime: randomProcessTime, time: randomProcessTime, startTime: 0})
         }
       }
     },
