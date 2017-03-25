@@ -74,7 +74,7 @@
       title="多级反馈处理结果"
       v-model="modal"
       :mask-closable="false">
-      <Table height="250" :columns="resultColumns" :data="resultQueue"></Table>
+      <Table height="230" :columns="resultColumns" :data="resultQueueCache"></Table>
     </Modal>
     <draggable class="selected" v-model="selectedCards" :options="dragOptions" :move="onMove" >
       <Row>
@@ -160,7 +160,7 @@
             width: 120
           }
         ],
-        resultQueue: [
+        resultQueueCards: [
         ],
         modal: false,
         index: 4,
@@ -187,8 +187,9 @@
           if (this.firstQueueCards[0]['time'] > 0) {
             this.secondQueueCards.push(this.firstQueueCards.shift())
           } else {
-            this.firstQueueCards[0]['startTime'] = this.QueueRuntime + this.firstQueueCards[0]['time'] - this.firstQueueCards[0]['startTime']
-            this.resultQueue.push(this.firstQueueCards.shift())
+            this.QueueRuntime += this.firstQueueCards[0]['time']
+            this.firstQueueCards[0]['startTime'] = this.QueueRuntime - this.firstQueueCards[0]['startTime']
+            this.resultQueueCards.push(this.firstQueueCards.shift())
           }
         } else if (this.secondQueueCards.length !== 0) {
           this.QueueRuntime += this.secondQueueCost
@@ -196,8 +197,9 @@
           if (this.secondQueueCards[0]['time'] > 0) {
             this.thirdQueueCards.push(this.secondQueueCards.shift())
           } else {
-            this.secondQueueCards[0]['startTime'] = this.QueueRuntime + this.secondQueueCards[0]['time'] - this.secondQueueCards[0]['startTime']
-            this.resultQueue.push(this.secondQueueCards.shift())
+            this.QueueRuntime += this.secondQueueCards[0]['time']
+            this.secondQueueCards[0]['startTime'] = this.QueueRuntime - this.secondQueueCards[0]['startTime']
+            this.resultQueueCards.push(this.secondQueueCards.shift())
           }
         } else if (this.thirdQueueCards.length !== 0) {
           this.QueueRuntime += this.thirdQueueCost
@@ -205,8 +207,9 @@
           if (this.thirdQueueCards[0]['time'] > 0) {
             this.thirdQueueCards.push(this.thirdQueueCards.shift())
           } else {
-            this.thirdQueueCards[0]['startTime'] = this.QueueRuntime + this.thirdQueueCards[0]['time'] - this.thirdQueueCards[0]['startTime']
-            this.resultQueue.push(this.thirdQueueCards.shift())
+            this.QueueRuntime += this.thirdQueueCards[0]['time']
+            this.thirdQueueCards[0]['startTime'] = this.QueueRuntime - this.thirdQueueCards[0]['startTime']
+            this.resultQueueCards.push(this.thirdQueueCards.shift())
           }
         } else {
           this.pauseQueue()
@@ -278,6 +281,13 @@
           thirdCache.push({id: 'MORE', index: this.thirdQueueCards[3]['index'], totaltime: thirdCacheTotalTime, time: thirdCacheTime})
         }
         return thirdCache
+      },
+      resultQueueCache: function () {
+        var resultCache = []
+        for (var i = 0; i < this.resultQueueCards.length; i++) {
+          resultCache.push({id: this.resultQueueCards[i]['id'], totaltime: this.resultQueueCards[i]['totaltime'], startTime: this.resultQueueCards[i]['startTime'], weightStartTime: (this.resultQueueCards[i]['startTime'] / this.resultQueueCards[i]['totaltime']).toFixed(2)})
+        }
+        return resultCache
       }
     },
     watch: {
